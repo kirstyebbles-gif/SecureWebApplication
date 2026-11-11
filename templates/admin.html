@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard | SecurePortal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">SecurePortal Admin</div>
+    <nav>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    </nav>
+</header>
+
+<a href="{{ url_for('admin_requests') }}">Manage Support Requests</a>
+
+<main class="dashboard">
+
+    <h1>Administrator Dashboard</h1>
+
+    <h2>Registered Users</h2>
+
+    <div class="records-container">
+
+        {% for user in users %}
+
+        <div class="record-card">
+
+            <h3>{{ user.username }}</h3>
+
+            <p>{{ user.email }}</p>
+
+            <p>Current role: {{ user.role }}</p>
+
+            <form method="POST"
+                  action="{{ url_for('change_user_role', user_id=user.id) }}">
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <select name="role">
+                    <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
+                    <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                </select>
+
+                <button type="submit">Update Role</button>
+
+            </form>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <h2>Total Records: {{ records|length }}</h2>
+
+</main>
+
+</body>
+</html>

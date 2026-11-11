@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Record | SecurePortal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="auth-container">
+
+        <h1>Add New Record</h1>
+
+        <p>Enter the details of your new record.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST">
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <label>Record Title</label>
+
+            <input
+                type="text"
+                name="title"
+                maxlength="120"
+                required
+            >
+
+            <label>Record Description</label>
+
+            <textarea
+                name="description"
+                rows="6"
+                required
+            ></textarea>
+
+            <button type="submit">Save Record</button>
+
+        </form>
+
+        <p>
+            <a href="{{ url_for('records') }}">Back to Records</a>
+        </p>
+
+    </div>
+
+</body>
+</html>

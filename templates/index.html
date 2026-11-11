@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Secure Records Portal</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">SecurePortal</div>
+
+      <nav>
+    <a href="/">Home</a>
+    <a href="{{ url_for('login') }}">Login</a>
+    <a href="{{ url_for('register') }}">Register</a>
+</nav>
+    </header>
+
+    <main class="hero">
+
+        <div class="hero-content">
+
+            <p class="tagline">University Management System </p>
+
+            <h1>Portal designed to support with all your needs ! <br>
+                Mental Wellbeing , Academic Support , Accomodation Support , Financial Wellbeing Support</h1>
+
+            
+
+            <div class="buttons">
+               <a href="{{ url_for('register') }}" class="primary-button">
+    Get Started
+</a>
+
+                <a href="#" class="secondary-button">
+                    Learn More
+                </a>
+            </div>
+
+        </div>
+
+        <div class="security-card">
+            <div class="security-icon">🔒</div>
+
+            <h2>Security First</h2>
+
+            <p>
+                Your records are protected using
+                security-focused technologies
+                and access controls.
+            </p>
+
+            <div class="security-status">
+                <span class="status-dot"></span>
+                Security-focused platform
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>SecurePortal © 2026 | Secure Records Management</p>
+    </footer>
+
+</body>
+</html>

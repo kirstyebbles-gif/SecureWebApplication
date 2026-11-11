@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | SecurePortal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="auth-container">
+        <h1>Create an Account</h1>
+        <p>Register to access SecurePortal.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <label>Username</label>
+            <input type="text" name="username" required maxlength="80">
+
+            <label>Email Address</label>
+            <input type="email" name="email" required maxlength="120">
+
+            <label>Password</label>
+            <input type="password" name="password" required minlength="12">
+
+            <button type="submit">Create Account</button>
+        </form>
+
+        <p>Already registered?
+            <a href="{{ url_for('login') }}">Log in</a>
+        </p>
+    </div>
+
+</body>
+</html>

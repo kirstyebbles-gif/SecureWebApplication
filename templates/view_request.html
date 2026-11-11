@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Request - SecurePortal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <main class="records-container">
+        <h1>{{ support_request.title }}</h1>
+
+        <p><strong>Category:</strong> {{ support_request.category }}</p>
+        <p><strong>Status:</strong> {{ support_request.status }}</p>
+        <p><strong>Submitted:</strong> {{ support_request.created_at }}</p>
+
+        <h2>Request Description</h2>
+        <p>{{ support_request.description }}</p>
+
+        <a href="{{ url_for('my_requests') }}">Back to My Requests</a>
+    </main>
+
+</body>
+</html>
