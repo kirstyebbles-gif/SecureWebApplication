@@ -184,6 +184,7 @@ def log_action(action, details=""):
     db.session.commit()
 
 
+
 # --------------------------------------------------
 # 5. ADMIN ACCESS DECORATOR
 # --------------------------------------------------
@@ -201,6 +202,19 @@ def admin_required(function):
 
     return decorated_function
 
+
+@app.route("/admin/audit-logs")
+@admin_required
+def audit_logs():
+
+    logs = AuditLog.query.order_by(
+        AuditLog.timestamp.desc()
+    ).all()
+
+    return render_template(
+        "audit_logs.html",
+        logs=logs
+    )
 
 # --------------------------------------------------
 # 6. HOME PAGE

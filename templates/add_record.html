@@ -8,50 +8,106 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
-<body>
+<body class="sp-home">
 
-    <div class="auth-container">
+    <div class="sp-layout">
 
-        <h1>Add New Record</h1>
+        <!-- Sidebar -->
+        <aside class="sp-sidebar">
+            <div class="sp-brand">SecurePortal</div>
 
-        <p>Enter the details of your new record.</p>
+            <nav class="sp-navigation">
+                <a href="{{ url_for('home') }}" class="sp-nav-link">Home</a>
+                <a href="{{ url_for('dashboard') }}" class="sp-nav-link">Dashboard</a>
+                <a href="{{ url_for('records') }}" class="sp-nav-link active">My Records</a>
+                <a href="{{ url_for('my_requests') }}" class="sp-nav-link">My Requests</a>
+                <a href="{{ url_for('submit_request') }}" class="sp-nav-link">Submit Request</a>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% for category, message in messages %}
-                <div class="message {{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endwith %}
+                {% if current_user.role == 'admin' %}
+                    <a href="{{url_for('admin_dashboard') }}" class="sp-nav-link">Administration</a>
+                {% endif %}
+            </nav>
 
-        <form method="POST">
+            <div class="sp-sidebar-bottom">
+                <form method="POST" action="{{ url_for('logout') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="sp-logout-button">Log Out</button>
+                </form>
+            </div>
+        </aside>
 
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <!-- Main content -->
+        <main class="sp-main">
 
-            <label>Record Title</label>
+            <section class="sp-form-welcome">
+                <span class="sp-section-label">STUDENT RECORDS</span>
+                <h1>Add a New Record</h1>
+                <p>Enter the information below to create a new secure record.</p>
+            </section>
 
-            <input
-                type="text"
-                name="title"
-                maxlength="120"
-                required
-            >
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
 
-            <label>Record Description</label>
+            <section class="sp-form-card">
 
-            <textarea
-                name="description"
-                rows="6"
-                required
-            ></textarea>
+                <div class="sp-form-heading">
+                    <div>
+                        <h2>Record Information</h2>
+                        <p>Complete both fields before saving your record.</p>
+                    </div>
+                    <div class="sp-form-icon">+</div>
+                </div>
 
-            <button type="submit">Save Record</button>
+                <form method="POST" class="sp-record-form">
 
-        </form>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <p>
-            <a href="{{ url_for('records') }}">Back to Records</a>
-        </p>
+                    <div class="sp-form-group">
+                        <label for="title">Record Title</label>
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            maxlength="120"
+                            placeholder="Enter a title for your record"
+                            required
+                        >
+                        <small>Use a clear title so you can identify this record easily.</small>
+                    </div>
 
+                    <div class="sp-form-group">
+                        <label for="description">Record Description</label>
+                        <textarea
+                            id="description"
+                            name="description"
+                            rows="7"
+                            placeholder="Enter the details of your record..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="sp-form-actions">
+                        <a href="{{ url_for('records') }}" class="sp-form-cancel">
+                            Cancel
+                        </a>
+                        <button type="submit" class="sp-form-save">
+                            Save Record
+                        </button>
+                    </div>
+
+                </form>
+            </section>
+
+            <footer class="sp-footer">
+                SecurePortal · Your university information, securely managed.
+            </footer>
+
+        </main>
     </div>
 
 </body>
 </html>
+

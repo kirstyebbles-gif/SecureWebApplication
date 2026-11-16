@@ -7,37 +7,95 @@
     <title>Create Account | SecurePortal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
 
-    <div class="auth-container">
-        <h1>Create an Account</h1>
-        <p>Register to access SecurePortal.</p>
+<body class="auth-page">
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% for category, message in messages %}
-                <div class="message {{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endwith %}
+    <div class="auth-wrapper">
 
-        <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <a href="{{ url_for('home') }}" class="auth-brand">
+            <span>UNIVERSITY PORTAL</span>
+        </a>
 
-            <label>Username</label>
-            <input type="text" name="username" required maxlength="80">
+        <div class="auth-container">
 
-            <label>Email Address</label>
-            <input type="email" name="email" required maxlength="120">
+            <div class="auth-heading">
+                <h1>Create an Account</h1>
+                <p>Register to access your university portal.</p>
+            </div>
 
-            <label>Password</label>
-            <input type="password" name="password" required minlength="12">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
 
-            <button type="submit">Create Account</button>
-        </form>
+            <form method="POST">
 
-        <p>Already registered?
-            <a href="{{ url_for('login') }}">Log in</a>
-        </p>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="auth-form-group">
+                    <label for="username">Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Choose a username"
+                        autocomplete="username"
+                        maxlength="80"
+                        required
+                    >
+                </div>
+
+                <div class="auth-form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        autocomplete="email"
+                        maxlength="120"
+                        required
+                    >
+                </div>
+
+                <div class="auth-form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a secure password"
+                        autocomplete="new-password"
+                        minlength="12"
+                        required
+                    >
+                    <small class="password-hint">
+                        Your password must contain at least 12 characters.
+                    </small>
+                </div>
+
+                <button type="submit" class="auth-submit">
+                    Create Account
+                </button>
+
+            </form>
+
+            <div class="auth-footer">
+                <p>Already registered?</p>
+                <a href="{{ url_for('login') }}">Sign in to your account</a>
+            </div>
+
+        </div>
+
+    
+
+        <a href="{{ url_for('home') }}" class="auth-back">
+            ← Back to homepage
+        </a>
+
     </div>
 
 </body>
 </html>
+

@@ -4,41 +4,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | SecurePortal</title>
+    <title>Dashboard | UniversityPortal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
 
-    <header>
-        <div class="logo">SecurePortal</div>
+<body class="sp-home">
 
-        <nav>
-            <a href="{{ url_for('dashboard') }}">Dashboard</a>
-            <form method="POST" action="{{ url_for('logout') }}" class="logout-form">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <button type="submit">Log Out</button>
-            </form>
+    <!-- Sidebar -->
+    <aside class="sp-sidebar">
+
+        <a href="{{ url_for('home') }}" class="sp-brand">
+            <span class="sp-brand-icon">U</span>
+            <span>University<span class="sp-brand-light">Portal</span></span>
+        </a>
+
+        <p class="sp-nav-heading">UNIVERSITY PORTAL</p>
+
+        <nav class="sp-navigation">
+
+            <a href="{{ url_for('home') }}" class="sp-nav-link">
+                <span>⌂</span> Home
+            </a>
+
+            <a href="{{ url_for('dashboard') }}" class="sp-nav-link active">
+                <span>▦</span> Dashboard
+            </a>
+
+            <a href="{{ url_for('records') }}" class="sp-nav-link">
+                <span>▤</span>
+                {% if current_user.role == 'admin' %}
+                    Student Records
+                {% else %}
+                    My Records
+                {% endif %}
+            </a>
+
+            <a href="{{ url_for('my_requests') }}" class="sp-nav-link">
+                <span>▧</span> My Requests
+            </a>
+
+            <a href="{{ url_for('submit_request') }}" class="sp-nav-link">
+                <span>＋</span> Submit a Request
+            </a>
+
+            {% if current_user.role == 'admin' %}
+               <a href="{{ url_for('admin_dashboard') }}" class="sp-nav-link">
+                    <span>♙</span> Administration
+                </a>
+            {% endif %}
+
         </nav>
-    </header>
 
-    <main class="dashboard">
-        <h1>Welcome, {{ current_user.username }}!</h1>
+        <!-- Logout -->
+        <div class="sp-sidebar-bottom">
 
-        <p>You have successfully logged into SecurePortal.</p>
+            <form method="POST" action="{{ url_for('logout') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <a href="{{ url_for('records') }}" class="primary-button">
-    Manage Records
-</a>
-<a href="{{ url_for('submit_request') }}">Submit a Support Request</a>
+                <button type="submit" class="sp-logout">
+                    ↪ Log Out
+                </button>
+            </form>
 
-<a href="{{ url_for('my_requests') }}">View My Requests</a>
-
-        <div class="dashboard-card">
-            <h2>Your Account</h2>
-            <p><strong>Username:</strong> {{ current_user.username }}</p>
-            <p><strong>Email:</strong> {{ current_user.email }}</p>
-            <p><strong>Account type:</strong> {{ current_user.role }}</p>
         </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="sp-main">
+
+        <!-- Dashboard Welcome -->
+        <section class="sp-dashboard-welcome">
+
+            <div>
+                <span class="sp-eyebrow">UNIVERSITY STUDENT PORTAL</span>
+
+                <h1>
+                    Welcome back, {{ current_user.username }}!
+                </h1>
+
+                <p>
+                    Welcome to your dashboard. Here you can access your
+                    university records, manage requests and view your
+                    account information.
+                </p>
+            </div>
+
+
+        </section>
+
+
+        <!-- Quick Access -->
+        <section class="sp-section">
+
+            <div class="sp-section-heading">
+                <div>
+                    <span class="sp-eyebrow">QUICK ACCESS</span>
+                    <h2>Your university services</h2>
+                    <p>Choose a service to get started.</p>
+                </div>
+            </div>
+
+
+            <div class="sp-feature-grid">
+
+                <!-- Records Card -->
+                <article class="sp-feature-card">
+
+                    <div class="sp-feature-icon pink">▤</div>
+
+                    <h3>My Records</h3>
+
+                    <p>
+                        View and manage your personal university records
+                        securely.
+                    </p>
+
+                    <a href="{{ url_for('records') }}" class="sp-card-link">
+                        View Records →
+                    </a>
+
+                </article>
+
+
+                <!-- Submit Request Card -->
+                <article class="sp-feature-card">
+
+                    <div class="sp-feature-icon purple">＋</div>
+
+                    <h3>Submit a Request</h3>
+
+                    <p>
+                        Send a new request to the university
+                        administration team.
+                    </p>
+
+                    <a href="{{ url_for('submit_request') }}" class="sp-card-link">
+                        Submit Request →
+                    </a>
+
+                </article>
+
+
+                <!-- My Requests Card -->
+                <article class="sp-feature-card">
+
+                    <div class="sp-feature-icon rose">▧</div>
+
+                    <h3>My Requests</h3>
+
+                    <p>
+                        View your submitted requests and check their
+                        current progress.
+                    </p>
+
+                    <a href="{{ url_for('my_requests') }}" class="sp-card-link">
+                        View Requests →
+                    </a>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- Account Information -->
+        <section class="sp-account-section">
+
+            <div class="sp-section-heading">
+                <div>
+                    <span class="sp-eyebrow">ACCOUNT INFORMATION</span>
+                    <h2>Your account details</h2>
+                </div>
+            </div>
+
+            <div class="sp-account-card">
+
+                <div class="sp-account-header">
+                    <div class="sp-account-avatar">
+                        {{ current_user.username[0]|upper }}
+                    </div>
+
+                    <div>
+                        <h3>{{ current_user.username }}</h3>
+                        <p>University Portal Account</p>
+                    </div>
+                </div>
+
+                <div class="sp-account-details">
+
+                    <div class="sp-account-detail">
+                        <span>Username</span>
+                        <strong>{{ current_user.username }}</strong>
+                    </div>
+
+                    <div class="sp-account-detail">
+                        <span>Email Address</span>
+                        <strong>{{ current_user.email }}</strong>
+                    </div>
+
+                    <div class="sp-account-detail">
+                        <span>Account Type</span>
+                        <strong>{{ current_user.role|capitalize }}</strong>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
     </main>
 
 </body>

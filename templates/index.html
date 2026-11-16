@@ -1,72 +1,241 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Portal | University Portal</title>
 
-    <title>Secure Records Portal</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
-<body>
+<body class="sp-home">
 
-    <header>
-        <div class="logo">SecurePortal</div>
+    <!-- Sidebar Navigation -->
+    <aside class="sp-sidebar">
 
-      <nav>
-    <a href="/">Home</a>
-    <a href="{{ url_for('login') }}">Login</a>
-    <a href="{{ url_for('register') }}">Register</a>
-</nav>
-    </header>
+        <a href="{{ url_for('home') }}" class="sp-brand">
+            <span class="sp-brand-icon">U</span>
+            <span>University <span class="sp-brand-light">Portal</span></span>
+        </a>
 
-    <main class="hero">
+        <p class="sp-nav-heading">UNIVERSITY PORTAL</p>
 
-        <div class="hero-content">
+        <nav class="sp-navigation">
 
-            <p class="tagline">University Management System </p>
+            <a href="{{ url_for('home') }}" class="sp-nav-link active">
+                <span>⌂</span> Home
+            </a>
 
-            <h1>Portal designed to support with all your needs ! <br>
-                Mental Wellbeing , Academic Support , Accomodation Support , Financial Wellbeing Support</h1>
+            {% if current_user.is_authenticated %}
 
-            
-
-            <div class="buttons">
-               <a href="{{ url_for('register') }}" class="primary-button">
-    Get Started
-</a>
-
-                <a href="#" class="secondary-button">
-                    Learn More
+                <a href="{{ url_for('dashboard') }}" class="sp-nav-link">
+                    <span>▦</span> Dashboard
                 </a>
-            </div>
+
+                <a href="{{ url_for('records') }}" class="sp-nav-link">
+                    <span>▤</span>
+
+                    {% if current_user.role == 'admin' %}
+                        Student Records
+                    {% else %}
+                        My Records
+                    {% endif %}
+                </a>
+
+                {% if current_user.role == 'admin' %}
+                    <a href="{{ url_for('admin_dashboard') }}" class="sp-nav-link">
+                        <span>♙</span> Administration
+                    </a>
+                {% endif %}
+
+            {% else %}
+
+                <a href="{{ url_for('login') }}" class="sp-nav-link">
+                    <span>↪</span> Sign In
+                </a>
+
+                <a href="{{ url_for('register') }}" class="sp-nav-link">
+                    <span>＋</span> Student Registration
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+        <!-- Logout Button -->
+        <div class="sp-sidebar-bottom">
+
+            {% if current_user.is_authenticated %}
+
+                <form action="{{ url_for('logout') }}" method="POST">
+
+                    <input
+                        type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}"
+                    >
+
+                    <button type="submit" class="sp-logout">
+                        ↪ Log out
+                    </button>
+
+                </form>
+
+            {% endif %}
 
         </div>
 
-        <div class="security-card">
-            <div class="security-icon">🔒</div>
+    </aside>
 
-            <h2>Security First</h2>
 
-            <p>
-                Your records are protected using
-                security-focused technologies
-                and access controls.
-            </p>
+    <!-- Main Homepage Content -->
+    <main class="sp-main">
 
-            <div class="security-status">
-                <span class="status-dot"></span>
-                Security-focused platform
+        <section class="sp-hero">
+
+            <div class="sp-hero-content">
+
+                <span class="sp-eyebrow">
+                    YOUR UNIVERSITY. YOUR INFORMATION.
+                </span>
+
+                <h1>
+                    Your university life,
+                    <span>all in one place.</span>
+                </h1>
+
+                <p>
+                    Welcome to SecurePortal, your university information
+                    management platform. Access student records, manage
+                    important information and submit requests through
+                    one secure and easy-to-use portal.
+                </p>
+
+                <div class="sp-hero-actions">
+
+                    {% if current_user.is_authenticated %}
+
+                        <a
+                            href="{{ url_for('dashboard') }}"
+                            class="sp-button primary"
+                        >
+                            Go to Dashboard →
+                        </a>
+
+                        <a
+                            href="{{ url_for('records') }}"
+                            class="sp-button secondary"
+                        >
+                            View Records
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            href="{{ url_for('login') }}"
+                            class="sp-button primary"
+                        >
+                            Student & Staff Sign In →
+                        </a>
+
+                        <a
+                            href="{{ url_for('register') }}"
+                            class="sp-button secondary"
+                        >
+                            Create Account
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
             </div>
-        </div>
+
+        </section>
+
+
+        <!-- University Features Section -->
+        <section class="sp-section">
+
+            <div class="sp-section-heading">
+
+                <div>
+
+                    <span class="sp-eyebrow">
+                        YOUR UNIVERSITY AT YOUR FINGERTIPS
+                    </span>
+
+                    <h2>Everything you need, in one place</h2>
+
+                    <p>
+                        Simple tools to help students and university staff
+                        manage important information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Feature Cards -->
+            <div class="sp-feature-grid">
+
+                <article class="sp-feature-card">
+
+                    <div class="sp-feature-icon pink">
+                        ▤
+                    </div>
+
+                    <h3>Student Records</h3>
+
+                    <p>
+                        Access and manage student information and
+                        important university records securely.
+                    </p>
+
+                </article>
+
+
+                <article class="sp-feature-card">
+
+                    <div class="sp-feature-icon purple">
+                        ♙
+                    </div>
+
+                    <h3>Student Requests</h3>
+
+                    <p>
+                        Submit requests and keep track of their
+                        progress through the university portal.
+                    </p>
+
+                </article>
+
+
+                <article class="sp-feature-card">
+
+                    <div class="sp-feature-icon rose">
+                        ♡
+                    </div>
+
+                    <h3>Privacy & Security</h3>
+
+                    <p>
+                        Role-based access and secure account features
+                        help protect sensitive university information.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
 
     </main>
 
-    <footer>
-        <p>SecurePortal © 2026 | Secure Records Management</p>
-    </footer>
-
 </body>
 </html>
+
+

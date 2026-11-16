@@ -3,62 +3,174 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard | SecurePortal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration | SecurePortal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
-<body>
+<body class="sp-home">
 
-<header>
-    <div class="logo">SecurePortal Admin</div>
-    <nav>
-        <a href="{{ url_for('dashboard') }}">Dashboard</a>
-    </nav>
-</header>
+    <aside class="sp-sidebar">
 
-<a href="{{ url_for('admin_requests') }}">Manage Support Requests</a>
-
-<main class="dashboard">
-
-    <h1>Administrator Dashboard</h1>
-
-    <h2>Registered Users</h2>
-
-    <div class="records-container">
-
-        {% for user in users %}
-
-        <div class="record-card">
-
-            <h3>{{ user.username }}</h3>
-
-            <p>{{ user.email }}</p>
-
-            <p>Current role: {{ user.role }}</p>
-
-            <form method="POST"
-                  action="{{ url_for('change_user_role', user_id=user.id) }}">
-
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-                <select name="role">
-                    <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
-                    <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
-                </select>
-
-                <button type="submit">Update Role</button>
-
-            </form>
-
+        <div class="sp-brand">
+            <span class="sp-brand-icon">♡</span>
+            <span>SecurePortal</span>
         </div>
 
-        {% endfor %}
+        <nav class="sp-navigation">
 
-    </div>
+            <a href="{{ url_for('home') }}" class="sp-nav-link">
+                <span>⌂</span> Home
+            </a>
 
-    <h2>Total Records: {{ records|length }}</h2>
+            <a href="{{ url_for('dashboard') }}" class="sp-nav-link">
+                <span>▦</span> Dashboard
+            </a>
 
-</main>
+            <a href="{{ url_for('admin_dashboard') }}" class="sp-nav-link active">
+                <span>▤</span> Student Records
+            </a>
+
+            <a href="{{ url_for('admin_dashboard') }}" class="sp-nav-link active">
+                <span>⚙</span> Administration
+            </a>
+
+            <a href="{{ url_for('admin_requests') }}" class="sp-nav-link">
+                <span>✉</span> Support Requests
+            </a>
+
+            <a href="{{ url_for('audit_logs') }}">Audit Logs</a>
+
+        </nav>
+
+        <div class="sp-sidebar-bottom">
+            <form action="{{ url_for('logout') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="sp-logout-button">
+                    ↪ Log Out
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+    <main class="sp-main">
+
+        <section class="sp-admin-welcome">
+            <div>
+                <span class="sp-eyebrow">STAFF AREA</span>
+                <h1>Administration</h1>
+                <p>Manage university users, student records and support requests.</p>
+            </div>
+        </section>
+
+        <section class="sp-admin-stats">
+
+            <div class="sp-admin-stat-card">
+                <div class="sp-admin-stat-icon">♙</div>
+                <div>
+                    <p>Registered Users</p>
+                    <h2>{{ users|length }}</h2>
+                </div>
+            </div>
+
+            <div class="sp-admin-stat-card">
+                <div class="sp-admin-stat-icon">▤</div>
+                <div>
+                    <p>Total Records</p>
+                    <h2>{{ records|length }}</h2>
+                </div>
+            </div>
+
+            <a href="{{ url_for('admin_requests') }}" class="sp-admin-stat-card sp-admin-stat-link">
+                <div class="sp-admin-stat-icon">✉</div>
+                <div>
+                    <p>Support Requests</p>
+                    <span>Manage requests →</span>
+                </div>
+            </a>
+
+        </section>
+
+        <section class="sp-admin-users">
+
+            <div class="sp-admin-section-heading">
+                <div>
+                    <h2>Registered Users</h2>
+                    <p>View accounts and manage user permissions.</p>
+                </div>
+
+                <span class="sp-admin-user-count">
+                    {{ users|length }} users
+                </span>
+            </div>
+
+            <div class="sp-admin-user-list">
+
+                {% for user in users %}
+
+                <div class="sp-admin-user-card">
+
+                    <div class="sp-admin-user-info">
+
+                        <div class="sp-admin-avatar">
+                            {{ user.username[0]|upper }}
+                        </div>
+
+                        <div>
+                            <h3>{{ user.username }}</h3>
+                            <p>{{ user.email }}</p>
+                        </div>
+
+                    </div>
+
+                    <div class="sp-admin-role">
+                        <span class="sp-admin-role-label">Current role</span>
+
+                        <span class="sp-role-badge
+                            {% if user.role == 'admin' %}
+                                sp-role-admin
+                            {% else %}
+                                sp-role-user
+                            {% endif %}">
+                            {{ user.role|capitalize }}
+                        </span>
+                    </div>
+
+                    <form method="POST"
+                          action="{{ url_for('change_user_role', user_id=user.id) }}"
+                          class="sp-admin-role-form">
+
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                        <select name="role" aria-label="Change role for {{ user.username }}">
+                            <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
+                            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                        </select>
+
+                        <button type="submit">Update Role</button>
+
+                    </form>
+
+                </div>
+
+                {% else %}
+
+                <div class="sp-admin-empty">
+                    <h3>No registered users</h3>
+                    <p>Registered accounts will appear here.</p>
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+
+
+    </main>
 
 </body>
 </html>
+

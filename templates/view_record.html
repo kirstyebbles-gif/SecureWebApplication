@@ -8,25 +8,127 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
-<body>
+<body class="sp-home">
 
-    <div class="auth-container">
+    <!-- Sidebar -->
+    <aside class="sp-sidebar">
 
-        <h1>{{ record.title }}</h1>
+        <div class="sp-brand">
+            SecurePortal
+        </div>
 
-        <p>{{ record.description }}</p>
+        <nav class="sp-navigation">
 
-        <hr>
+            <a href="{{ url_for('home') }}" class="sp-nav-link">
+                Home
+            </a>
 
-        <p><strong>Record ID:</strong> {{ record.id }}</p>
+            <a href="{{ url_for('dashboard') }}" class="sp-nav-link">
+                Dashboard
+            </a>
 
-        <p><strong>Created:</strong> {{ record.created_at }}</p>
+            <a href="{{ url_for('records') }}" class="sp-nav-link active">
+                My Records
+            </a>
 
-        <p><strong>Owner:</strong> {{ record.owner.username }}</p>
+            {% if current_user.role == 'admin' %}
+                <a href="{{url_for('admin_dashboard')  }}" class="sp-nav-link">
+                    Administration
+                </a>
+            {% endif %}
 
-        <a href="{{ url_for('records') }}">Back to Records</a>
+        </nav>
 
-    </div>
+        <div class="sp-sidebar-bottom">
+            <form method="POST" action="{{ url_for('logout') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="sp-logout-button">
+                    Log Out
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="sp-main">
+
+        <section class="sp-form-welcome">
+
+            <span class="sp-form-label">STUDENT RECORDS</span>
+
+            <h1>Record Details</h1>
+
+            <p>
+                View the information associated with this record.
+            </p>
+
+        </section>
+
+        <!-- Record Details Card -->
+        <section class="sp-view-record-card">
+
+            <div class="sp-view-record-header">
+
+                <div>
+                    <span class="sp-record-label">RECORD INFORMATION</span>
+                    <h2>{{ record.title }}</h2>
+                </div>
+
+                <div class="sp-view-record-icon">
+                    &#128196;
+                </div>
+
+            </div>
+
+            <div class="sp-view-record-description">
+
+                <h3>Description</h3>
+
+                <p>{{ record.description }}</p>
+
+            </div>
+
+            <div class="sp-view-record-meta">
+
+                <div class="sp-record-meta-item">
+                    <span>Record ID</span>
+                    <strong>#{{ record.id }}</strong>
+                </div>
+
+                <div class="sp-record-meta-item">
+                    <span>Created</span>
+                    <strong>{{ record.created_at }}</strong>
+                </div>
+
+                <div class="sp-record-meta-item">
+                    <span>Record Owner</span>
+                    <strong>{{ record.owner.username }}</strong>
+                </div>
+
+            </div>
+
+            <div class="sp-form-actions">
+
+                <a href="{{ url_for('records') }}" class="sp-form-cancel">
+                    Back to Records
+                </a>
+
+                {% if current_user.role == 'admin' or record.owner_id == current_user.id %}
+                    <a href="{{ url_for('edit_record', record_id=record.id) }}" class="sp-form-submit sp-view-edit-button">
+                        Edit Record
+                    </a>
+                {% endif %}
+
+            </div>
+
+        </section>
+
+        <footer class="sp-footer">
+            SecurePortal | University Records Management
+        </footer>
+
+    </main>
 
 </body>
 </html>

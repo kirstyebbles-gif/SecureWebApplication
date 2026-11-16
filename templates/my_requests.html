@@ -4,34 +4,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Requests - SecurePortal</title>
+    <title>My Requests | SecurePortal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
 
-    <main class="records-container">
-        <h1>My Support Requests</h1>
+<body class="sp-home">
 
-        {% for item in requests %}
-            <div class="record-card">
-                <h2>{{ item.title }}</h2>
+    <!-- Sidebar -->
+    <aside class="sp-sidebar">
 
-                <p><strong>Category:</strong> {{ item.category }}</p>
-                <p><strong>Status:</strong> {{ item.status }}</p>
-                <p><strong>Submitted:</strong> {{ item.created_at }}</p>
+        <div class="sp-brand">
+            SecurePortal
+        </div>
 
-                <a href="{{ url_for('view_request', request_id=item.id) }}">
-                    View Request
+        <nav class="sp-navigation">
+
+            <a href="{{ url_for('home') }}" class="sp-nav-link">
+                Home
+            </a>
+
+            <a href="{{ url_for('dashboard') }}" class="sp-nav-link">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('records') }}" class="sp-nav-link">
+                My Records
+            </a>
+
+            <a href="{{ url_for('my_requests') }}" class="sp-nav-link active">
+                My Requests
+            </a>
+
+            <a href="{{ url_for('submit_request') }}" class="sp-nav-link">
+                Submit Request
+            </a>
+
+            {% if current_user.role == 'admin' %}
+                <a href="{{ uurl_for('admin_dashboard') }}" class="sp-nav-link">
+                    Administration
                 </a>
-            </div>
-        {% else %}
-            <p>You have not submitted any requests yet.</p>
-        {% endfor %}
+            {% endif %}
 
-        <a href="{{ url_for('submit_request') }}">Submit Another Request</a>
-        <br>
-        <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+        </nav>
+
+        <div class="sp-sidebar-bottom">
+            <form method="POST" action="{{ url_for('logout') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="sp-logout-button">
+                    Log Out
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="sp-main">
+
+        <section class="sp-requests-welcome">
+
+            <span class="sp-form-label">STUDENT SUPPORT</span>
+
+            <h1>My Support Requests</h1>
+
+            <p>
+                View your submitted support requests and keep track
+                of their progress.
+            </p>
+
+        
+        </section>
+
+        <!-- Requests List -->
+        <section class="sp-requests-section">
+
+            <div class="sp-requests-heading">
+                <h2>Your Requests</h2>
+                <p>Review the details and status of your submissions.</p>
+            </div>
+
+            <div class="sp-requests-list">
+
+                {% for item in requests %}
+
+                    <div class="sp-request-card">
+
+                        <div class="sp-request-card-main">
+
+                            <div class="sp-request-icon">
+                                &#128221;
+                            </div>
+
+                            <div class="sp-request-details">
+
+                                <h3>{{ item.title }}</h3>
+
+                                <p>
+                                    <strong>Category:</strong>
+                                    {{ item.category }}
+                                </p>
+
+                                <p>
+                                    <strong>Submitted:</strong>
+                                    {{ item.created_at }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="sp-request-card-footer">
+
+                            <div class="sp-request-status">
+                                <span class="sp-status-label">Status</span>
+                                <span class="sp-status-badge">
+                                    {{ item.status }}
+                                </span>
+                            </div>
+
+                            <a
+                                href="{{ url_for('view_request', request_id=item.id) }}"
+                                class="sp-request-view-button"
+                            >
+                                View Request
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="sp-requests-empty">
+
+                        <div class="sp-empty-icon">&#128221;</div>
+
+                        <h3>No Support Requests Yet</h3>
+
+                        <p>
+                            You haven't submitted any support requests.
+                            When you do, they will appear here.
+                        </p>
+
+                        <a href="{{ url_for('submit_request') }}" class="sp-form-submit">
+                            Submit Your First Request
+                        </a>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    
+
     </main>
 
 </body>
 </html>
+

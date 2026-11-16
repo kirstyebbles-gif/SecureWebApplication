@@ -7,34 +7,75 @@
     <title>Login | SecurePortal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
 
-    <div class="auth-container">
-        <h1>Welcome Back</h1>
-        <p>Log in to your secure account.</p>
+<body class="auth-page">
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% for category, message in messages %}
-                <div class="message {{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endwith %}
+    <div class="auth-wrapper">
 
-        <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <a href="{{ url_for('home') }}" class="auth-brand">
+            <span>UNIVERSITY PORTAL</span>
+        </a>
 
-            <label>Email Address</label>
-            <input type="email" name="email" required>
+        <div class="auth-container">
 
-            <label>Password</label>
-            <input type="password" name="password" required>
+            <div class="auth-heading">
+                <h1>Welcome Back</h1>
+                <p>Sign in to access your university account.</p>
+            </div>
 
-            <button type="submit">Log In</button>
-        </form>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
 
-        <p>Don't have an account?
-            <a href="{{ url_for('register') }}">Register here</a>
-        </p>
+            <form method="POST">
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="auth-form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="auth-form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="auth-submit">
+                    Sign In
+                </button>
+
+            </form>
+
+            <div class="auth-footer">
+                <p>Don't have an account?</p>
+                <a href="{{ url_for('register') }}">Create an account</a>
+            </div>
+
+        </div>
+
+        <a href="{{ url_for('home') }}" class="auth-back">
+            ← Back to homepage
+        </a>
+
     </div>
 
 </body>
 </html>
+

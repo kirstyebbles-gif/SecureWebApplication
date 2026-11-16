@@ -3,42 +3,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Record | SecurePortal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
 
-    <div class="auth-container">
+<body class="sp-home">
 
-        <h1>Edit Record</h1>
+    <!-- Sidebar -->
+    <aside class="sp-sidebar">
 
-        <form method="POST">
+        <div class="sp-brand">
+            SecurePortal
+        </div>
 
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <nav class="sp-navigation">
 
-            <label>Record Title</label>
+            <a href="{{ url_for('home') }}" class="sp-nav-link">
+                Home
+            </a>
 
-            <input
-                type="text"
-                name="title"
-                value="{{ record.title }}"
-                maxlength="120"
-                required
-            >
+            <a href="{{ url_for('dashboard') }}" class="sp-nav-link">
+                Dashboard
+            </a>
 
-            <label>Record Description</label>
+            <a href="{{ url_for('records') }}" class="sp-nav-link active">
+                My Records
+            </a>
 
-            <textarea name="description" rows="6" required>{{ record.description }}</textarea>
+            {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('admin_dashboard') }}" class="sp-nav-link">
+                    Administration
+                </a>
+            {% endif %}
 
-            <button type="submit">Save Changes</button>
+        </nav>
 
-        </form>
+        <div class="sp-sidebar-bottom">
+            <form method="POST" action="{{ url_for('logout') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="sp-logout-button">
+                    Log Out
+                </button>
+            </form>
+        </div>
 
-        <p>
-            <a href="{{ url_for('records') }}">Cancel</a>
-        </p>
+    </aside>
 
-    </div>
+    <!-- Main Content -->
+    <main class="sp-main">
+
+        <section class="sp-form-welcome">
+
+            <span class="sp-form-label">STUDENT RECORDS</span>
+
+            <h1>Edit Record</h1>
+
+            <p>
+                Update the information below and save your changes.
+            </p>
+
+        </section>
+
+        <!-- Edit Form -->
+        <section class="sp-form-card">
+
+            <div class="sp-form-card-heading">
+                <h2>Update Record Information</h2>
+                <p>Make changes to your existing record below.</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endwith %}
+
+            <form method="POST" class="sp-record-form">
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="sp-form-group">
+
+                    <label for="title">Record Title</label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        value="{{ record.title }}"
+                        maxlength="120"
+                        required
+                    >
+
+                </div>
+
+                <div class="sp-form-group">
+
+                    <label for="description">Record Description</label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="7"
+                        required
+                    >{{ record.description }}</textarea>
+
+                </div>
+
+                <div class="sp-form-actions">
+
+                    <a href="{{ url_for('records') }}" class="sp-form-cancel">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="sp-form-submit">
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <footer class="sp-footer">
+            SecurePortal | University Records Management
+        </footer>
+
+    </main>
 
 </body>
 </html>
+

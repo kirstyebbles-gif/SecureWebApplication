@@ -4,70 +4,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit a Request - SecurePortal</title>
+    <title>Submit Request | SecurePortal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
 
-    <main class="records-container">
+<body class="sp-home">
 
-        <h1>Submit a Support Request</h1>
+    <!-- Sidebar -->
+    <aside class="sp-sidebar">
 
-        <p>Select the category that best describes the support you need.</p>
+        <div class="sp-brand">
+            SecurePortal
+        </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% for category, message in messages %}
-                <p class="{{ category }}">{{ message }}</p>
-            {% endfor %}
-        {% endwith %}
+        <nav class="sp-navigation">
 
-        <form method="POST">
+            <a href="{{ url_for('home') }}" class="sp-nav-link">
+                Home
+            </a>
 
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <a href="{{ url_for('dashboard') }}" class="sp-nav-link">
+                Dashboard
+            </a>
 
-            <label for="category">Request category</label>
+            <a href="{{ url_for('records') }}" class="sp-nav-link">
+                My Records
+            </a>
 
-            <select id="category" name="category" required>
-                <option value="">Choose a category</option>
-                {% for category in categories %}
-                    <option value="{{ category }}">{{ category }}</option>
+            <a href="{{ url_for('my_requests') }}" class="sp-nav-link">
+                My Requests
+            </a>
+
+            <a href="{{ url_for('submit_request') }}" class="sp-nav-link active">
+                Submit Request
+            </a>
+
+            {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('admin_dashboard') }}" class="sp-nav-link">
+                    Administration
+                </a>
+            {% endif %}
+
+        </nav>
+
+        <div class="sp-sidebar-bottom">
+            <form method="POST" action="{{ url_for('logout') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="sp-logout-button">
+                    Log Out
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="sp-main">
+
+        <section class="sp-form-welcome">
+
+            <span class="sp-form-label">STUDENT SUPPORT</span>
+
+            <h1>Submit a Support Request</h1>
+
+            <p>
+                Need help? Complete the form below and the university
+                support team can review your request.
+            </p>
+
+        </section>
+
+        <!-- Request Form -->
+        <section class="sp-form-card">
+
+            <div class="sp-form-card-heading">
+                <h2>Request Information</h2>
+                <p>Please provide the details of the support you need.</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="message {{ category }}">
+                        {{ message }}
+                    </div>
                 {% endfor %}
-            </select>
+            {% endwith %}
 
-            <label for="title">Request title</label>
+            <form method="POST" class="sp-record-form">
 
-            <input
-                type="text"
-                id="title"
-                name="title"
-                maxlength="120"
-                required
-                placeholder="Briefly describe what you need"
-            >
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-            <label for="description">Request description</label>
+                <!-- Category -->
+                <div class="sp-form-group">
 
-            <textarea
-                id="description"
-                name="description"
-                rows="7"
-                required
-                placeholder="Explain the support you need."
-            ></textarea>
+                    <label for="category">Request Category</label>
 
-            <button type="submit">Submit Request</button>
+                    <select id="category" name="category" required>
+                        <option value="">Choose a category</option>
 
-        </form>
+                        {% for category in categories %}
+                            <option value="{{ category }}">
+                                {{ category }}
+                            </option>
+                        {% endfor %}
 
-        <p>
-            <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
-        </p>
+                    </select>
 
-        <p>
-            <a href="{{ url_for('my_requests') }}">View My Requests</a>
-        </p>
+                </div>
+
+                <!-- Title -->
+                <div class="sp-form-group">
+
+                    <label for="title">Request Title</label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        maxlength="120"
+                        required
+                        placeholder="Briefly describe what you need"
+                    >
+
+                </div>
+
+                <!-- Description -->
+                <div class="sp-form-group">
+
+                    <label for="description">Request Description</label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="7"
+                        required
+                        placeholder="Explain the support you need in as much detail as possible."
+                    ></textarea>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="sp-form-actions">
+
+                    <a href="{{ url_for('my_requests') }}" class="sp-form-cancel">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="sp-form-submit">
+                        Submit Request
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+     
 
     </main>
 
 </body>
 </html>
+

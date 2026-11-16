@@ -4,23 +4,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Request - SecurePortal</title>
+    <title>View Request | SecurePortal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
 
-    <main class="records-container">
-        <h1>{{ support_request.title }}</h1>
+<body class="sp-home">
 
-        <p><strong>Category:</strong> {{ support_request.category }}</p>
-        <p><strong>Status:</strong> {{ support_request.status }}</p>
-        <p><strong>Submitted:</strong> {{ support_request.created_at }}</p>
+    <!-- Sidebar -->
+    <aside class="sp-sidebar">
 
-        <h2>Request Description</h2>
-        <p>{{ support_request.description }}</p>
+        <div class="sp-brand">
+            SecurePortal
+        </div>
 
-        <a href="{{ url_for('my_requests') }}">Back to My Requests</a>
+        <nav class="sp-navigation">
+
+            <a href="{{ url_for('home') }}" class="sp-nav-link">
+                Home
+            </a>
+
+            <a href="{{ url_for('dashboard') }}" class="sp-nav-link">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('records') }}" class="sp-nav-link">
+                My Records
+            </a>
+
+            <a href="{{ url_for('my_requests') }}" class="sp-nav-link active">
+                My Requests
+            </a>
+
+            <a href="{{ url_for('submit_request') }}" class="sp-nav-link">
+                Submit Request
+            </a>
+
+            {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('admin_dashboard') }}" class="sp-nav-link">
+                    Administration
+                </a>
+            {% endif %}
+
+        </nav>
+
+        <div class="sp-sidebar-bottom">
+            <form method="POST" action="{{ url_for('logout') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="sp-logout-button">
+                    Log Out
+                </button>
+            </form>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="sp-main">
+
+        <section class="sp-form-welcome">
+
+            <span class="sp-form-label">STUDENT SUPPORT</span>
+
+            <h1>Request Details</h1>
+
+            <p>
+                View the information and current status of your support request.
+            </p>
+
+        </section>
+
+        <!-- Request Details Card -->
+        <section class="sp-view-record-card">
+
+            <div class="sp-view-record-header">
+
+                <div>
+                    <span class="sp-record-label">SUPPORT REQUEST</span>
+                    <h2>{{ support_request.title }}</h2>
+                </div>
+
+                <div class="sp-view-record-icon">
+                    &#128221;
+                </div>
+
+            </div>
+
+            <!-- Request Information -->
+            <div class="sp-view-record-meta">
+
+                <div class="sp-record-meta-item">
+                    <span>Category</span>
+                    <strong>{{ support_request.category }}</strong>
+                </div>
+
+                <div class="sp-record-meta-item">
+                    <span>Current Status</span>
+                    <strong>{{ support_request.status }}</strong>
+                </div>
+
+                <div class="sp-record-meta-item">
+                    <span>Submitted</span>
+                    <strong>{{ support_request.created_at }}</strong>
+                </div>
+
+            </div>
+
+            <!-- Description -->
+            <div class="sp-view-record-description">
+
+                <h3>Request Description</h3>
+
+                <p>{{ support_request.description }}</p>
+
+            </div>
+
+            <div class="sp-form-actions">
+
+                <a href="{{ url_for('my_requests') }}" class="sp-form-cancel">
+                    Back to My Requests
+                </a>
+
+            </div>
+
+        </section>
+
+
     </main>
 
 </body>
 </html>
+
