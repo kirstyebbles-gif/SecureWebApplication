@@ -48,7 +48,7 @@
             </a>
 
             {% if current_user.role == 'admin' %}
-                <a href="{{ uurl_for('admin_dashboard') }}" class="sp-nav-link">
+                <a href="{{ url_for('admin_dashboard') }}" class="sp-nav-link">
                     <span>♙</span> Administration
                 </a>
             {% endif %}

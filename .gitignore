@@ -17,3 +17,11 @@ instance/
 
 # macOS files
 .DS_Store
+# Additional secret and database files
+*.sqlite
+*.sqlite-journal
+.env.*
+!.env.example
+
+# IDE settings
+.vscode/

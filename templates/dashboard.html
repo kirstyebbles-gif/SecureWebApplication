@@ -20,40 +20,54 @@
 
         <p class="sp-nav-heading">UNIVERSITY PORTAL</p>
 
-        <nav class="sp-navigation">
+   
+<nav class="sp-navigation">
 
-            <a href="{{ url_for('home') }}" class="sp-nav-link">
-                <span>⌂</span> Home
-            </a>
+    <a href="{{ url_for('home') }}" class="sp-nav-link">
+        <span>⌂</span> Home
+    </a>
 
-            <a href="{{ url_for('dashboard') }}" class="sp-nav-link active">
-                <span>▦</span> Dashboard
-            </a>
+    <a href="{{ url_for('dashboard') }}" class="sp-nav-link active">
+        <span>▦</span> Dashboard
+    </a>
 
-            <a href="{{ url_for('records') }}" class="sp-nav-link">
-                <span>▤</span>
-                {% if current_user.role == 'admin' %}
-                    Student Records
-                {% else %}
-                    My Records
-                {% endif %}
-            </a>
+    <a href="{{ url_for('records') }}" class="sp-nav-link">
+        <span>▤</span>
+        {% if current_user.role == 'admin' %}
+            Student Records
+        {% else %}
+            My Records
+        {% endif %}
+    </a>
 
-            <a href="{{ url_for('my_requests') }}" class="sp-nav-link">
-                <span>▧</span> My Requests
-            </a>
+    {% if current_user.role == 'admin' %}
 
-            <a href="{{ url_for('submit_request') }}" class="sp-nav-link">
-                <span>＋</span> Submit a Request
-            </a>
+        <a href="{{ url_for('admin_dashboard') }}" class="sp-nav-link">
+            <span>♙</span> Administration
+        </a>
 
-            {% if current_user.role == 'admin' %}
-               <a href="{{ url_for('admin_dashboard') }}" class="sp-nav-link">
-                    <span>♙</span> Administration
-                </a>
-            {% endif %}
+        <a href="{{ url_for('admin_requests') }}" class="sp-nav-link">
+            <span>✉</span> Support Requests
+        </a>
 
-        </nav>
+        <a href="{{ url_for('audit_logs') }}" class="sp-nav-link">
+            <span>▤</span> Audit Logs
+        </a>
+
+    {% else %}
+
+        <a href="{{ url_for('my_requests') }}" class="sp-nav-link">
+            <span>▧</span> My Requests
+        </a>
+
+        <a href="{{ url_for('submit_request') }}" class="sp-nav-link">
+            <span>＋</span> Submit a Request
+        </a>
+
+    {% endif %}
+
+</nav>
+
 
         <!-- Logout -->
         <div class="sp-sidebar-bottom">
@@ -107,65 +121,87 @@
             </div>
 
 
-            <div class="sp-feature-grid">
+      
+<div class="sp-feature-grid">
 
-                <!-- Records Card -->
-                <article class="sp-feature-card">
+    {% if current_user.role == 'admin' %}
 
-                    <div class="sp-feature-icon pink">▤</div>
+        <!-- Student Records -->
+        <article class="sp-feature-card">
+            <div class="sp-feature-icon pink">▤</div>
+            <h3>Student Records</h3>
+            <p>View and manage university student records.</p>
+            <a href="{{ url_for('records') }}" class="sp-card-link">
+                View Records →
+            </a>
+        </article>
 
-                    <h3>My Records</h3>
+        <!-- Administration -->
+        <article class="sp-feature-card">
+            <div class="sp-feature-icon purple">♙</div>
+            <h3>Administration</h3>
+            <p>Manage registered users and account permissions.</p>
+            <a href="{{ url_for('admin_dashboard') }}" class="sp-card-link">
+                Manage Users →
+            </a>
+        </article>
 
-                    <p>
-                        View and manage your personal university records
-                        securely.
-                    </p>
+        <!-- Support Requests -->
+        <article class="sp-feature-card">
+            <div class="sp-feature-icon rose">✉</div>
+            <h3>Support Requests</h3>
+            <p>Review and manage requests submitted by students.</p>
+            <a href="{{ url_for('admin_requests') }}" class="sp-card-link">
+                View Requests →
+            </a>
+        </article>
 
-                    <a href="{{ url_for('records') }}" class="sp-card-link">
-                        View Records →
-                    </a>
+        <!-- Audit Logs -->
+        <article class="sp-feature-card">
+            <div class="sp-feature-icon pink">▤</div>
+            <h3>Audit Logs</h3>
+            <p>Review recorded user activity across the portal.</p>
+            <a href="{{ url_for('audit_logs') }}" class="sp-card-link">
+                View Audit Logs →
+            </a>
+        </article>
 
-                </article>
+    {% else %}
 
+        <!-- My Records -->
+        <article class="sp-feature-card">
+            <div class="sp-feature-icon pink">▤</div>
+            <h3>My Records</h3>
+            <p>View and manage your personal university records securely.</p>
+            <a href="{{ url_for('records') }}" class="sp-card-link">
+                View Records →
+            </a>
+        </article>
 
-                <!-- Submit Request Card -->
-                <article class="sp-feature-card">
+        <!-- Submit Request -->
+        <article class="sp-feature-card">
+            <div class="sp-feature-icon purple">＋</div>
+            <h3>Submit a Request</h3>
+            <p>Send a new request to the university administration team.</p>
+            <a href="{{ url_for('submit_request') }}" class="sp-card-link">
+                Submit Request →
+            </a>
+        </article>
 
-                    <div class="sp-feature-icon purple">＋</div>
+        <!-- My Requests -->
+        <article class="sp-feature-card">
+            <div class="sp-feature-icon rose">▧</div>
+            <h3>My Requests</h3>
+            <p>View your submitted requests and check their current progress.</p>
+            <a href="{{ url_for('my_requests') }}" class="sp-card-link">
+                View Requests →
+            </a>
+        </article>
 
-                    <h3>Submit a Request</h3>
+    {% endif %}
 
-                    <p>
-                        Send a new request to the university
-                        administration team.
-                    </p>
+</div>
 
-                    <a href="{{ url_for('submit_request') }}" class="sp-card-link">
-                        Submit Request →
-                    </a>
-
-                </article>
-
-
-                <!-- My Requests Card -->
-                <article class="sp-feature-card">
-
-                    <div class="sp-feature-icon rose">▧</div>
-
-                    <h3>My Requests</h3>
-
-                    <p>
-                        View your submitted requests and check their
-                        current progress.
-                    </p>
-
-                    <a href="{{ url_for('my_requests') }}" class="sp-card-link">
-                        View Requests →
-                    </a>
-
-                </article>
-
-            </div>
 
         </section>
 
